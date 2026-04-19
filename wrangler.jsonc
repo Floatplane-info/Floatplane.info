@@ -1,0 +1,16 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "floatplane-info",
+	"compatibility_date": "2026-04-19",
+	"compatibility_flags": [
+		"nodejs_als"
+	],
+//	"main": ".svelte-kit/cloudflare/_worker.js",
+	"main": "src/index.ts",
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+	"workers_dev": true,
+	"preview_urls": true
+}

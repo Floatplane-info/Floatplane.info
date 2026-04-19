@@ -43,7 +43,24 @@ export function cloudflareHandlers(): Plugin {
                         sourcemap: false,
                     }
                 );
-                workerContent += compiled.code;
+
+                // Extract function names from the compiled code
+                const functionRegex = /export\s+async\s+function\s+(\w+)\s*\(/g;
+                const functions = [];
+                let match;
+                while ((match = functionRegex.exec(compiled.code)) !== null) {
+                    functions.push(match[1]);
+                }
+
+                // Append the function code (without export keyword)
+                const codeWithoutExports = compiled.code.replace(/export\s+async\s+function\s+(\w+)/g, 'async function $1');
+                workerContent += codeWithoutExports;
+
+                // Attach functions to the default export object
+                if (functions.length > 0) {
+                    workerContent += '\n\n// Attach handlers to default export\n';
+                    workerContent += 'worker_default.scheduled = scheduled;\n';
+                }
 
                 fs.writeFileSync(workerPath, workerContent);
                 console.log('✓ Appended custom Cloudflare handlers to worker');

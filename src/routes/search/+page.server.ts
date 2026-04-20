@@ -45,7 +45,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 collection: "floatplane",
                 q,
                 query_by: ["title", "textMarkdown"],
-                query_by_weights: [8, 1],
+                query_by_weights: [4, 1],
                 vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.4, distance_threshold:0.10)`,
                 sort_by,
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],

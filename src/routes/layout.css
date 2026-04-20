@@ -128,4 +128,18 @@
 	html {
 		@apply font-sans;
 	}
+	h1 {
+		font-size: var(--text-2xl);
+	}
+	h2 {
+		font-size: var(--text-xl);
+	}
+}
+
+.limit {
+	max-width: 800px;
+}
+
+.limit-large {
+	max-width: 1000px;
 }

@@ -2,6 +2,7 @@ import {error, redirect} from "@sveltejs/kit";
 import Typesense from "typesense";
 import type {PageServerLoad} from "./$types";
 import {env} from "$env/dynamic/private";
+import type {FloatplanePost} from "./types.ts";
 
 const client = new Typesense.Client({
     nodes: [{ host: "search.ajg0702.us", port: 443, protocol: "https" }],
@@ -24,7 +25,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
             return embedding;
         });
 
-    return await client.multiSearch.perform({
+    return await client.multiSearch.perform<FloatplanePost[]>({
         searches: [
             {
                 collection: "floatplane",

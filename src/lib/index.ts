@@ -1,1 +1,7 @@
-// place files you want to import through the `$lib` alias in this folder.
+
+
+export function typed<Type>(): Type;
+export function typed<Type>(def: Type): Type;
+export function typed<Type>(def?: Type): Type {
+    return def as Type;
+}

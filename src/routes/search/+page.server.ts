@@ -29,19 +29,32 @@ export const load: PageServerLoad = async ({platform, url}) => {
             return embedding;
         });
 
+    const sortBy = url.searchParams.get("sort");
+    let sort_by = "_text_match(bucket_size: 5):desc,releaseDate:desc,_text_match:desc";
+    if(sortBy && sortBy !== "default") {
+        if(sortBy === "oldest") {
+            sort_by = "releaseDate:asc"
+        } else if(sortBy === "newest") {
+            sort_by = "releaseDate:desc"
+        }
+    }
+
     return await client.multiSearch.perform<FloatplanePost[]>({
         searches: [
             {
                 collection: "floatplane",
                 q,
-                query_by: ["title"],
+                query_by: ["title", "textMarkdown"],
+                query_by_weights: [8, 1],
                 vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.4, distance_threshold:0.10)`,
-                sort_by: "_text_match(bucket_size: 20):desc,releaseDate:desc,_text_match:desc",
+                sort_by,
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],
                 page: 1,
                 per_page: 50,
-                rerank_hybrid_matches: true
+                rerank_hybrid_matches: true,
+                prefix: false,
+                drop_tokens_threshold: 10
             }
         ]
     })

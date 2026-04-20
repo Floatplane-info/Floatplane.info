@@ -31,7 +31,10 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 q,
                 query_by: ["title", "textMarkdown"],
                 vector_query: `embedding:(${JSON.stringify(embeddedQuery)})`,
-                sort_by: "_text_match:desc"
+                sort_by: "_text_match:desc",
+                exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
+                page: 1,
+                per_page: 50
             }
         ]
     })

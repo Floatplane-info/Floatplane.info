@@ -18,5 +18,7 @@
                 </InputGroup.Addon>
             </InputGroup.Root>
         </form>
+        <br>
+        This site is still <b>very</b> WIP, but i hope to polish it up over the next few days/weeks.
     </div>
 </div>

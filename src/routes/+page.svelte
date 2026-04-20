@@ -9,7 +9,7 @@
 
         <form action="/search" method="get" class="">
             <InputGroup.Root>
-                <InputGroup.Input class="text-xl" type="search" name="q" placeholder="Search across floatplane..." />
+                <InputGroup.Input type="search" name="q" placeholder="Search across floatplane..." />
                 <InputGroup.Addon>
                     <SearchIcon />
                 </InputGroup.Addon>

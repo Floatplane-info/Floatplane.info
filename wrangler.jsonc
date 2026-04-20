@@ -19,6 +19,12 @@
 	},
 	"workers_dev": true,
 	"preview_urls": true,
+	"routes": [
+		{
+			"pattern": "floatplane.info",
+			"custom_domain": true
+		}
+	],
 	"triggers": {
 		"crons": [
 			"*/5 * * * *"

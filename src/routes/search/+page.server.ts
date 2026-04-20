@@ -36,6 +36,8 @@ export const load: PageServerLoad = async ({platform, url}) => {
             sort_by = "releaseDate:asc"
         } else if(sortBy === "newest") {
             sort_by = "releaseDate:desc"
+        } else if(sortBy === "relevant") {
+            sort_by = "_text_match:desc"
         }
     }
 

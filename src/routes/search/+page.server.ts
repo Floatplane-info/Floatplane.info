@@ -34,10 +34,12 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 vector_query: `embedding:(${JSON.stringify(embeddedQuery)})`,
                 sort_by: "_text_match:desc",
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
+                highlight_fields: ["text", "title", "textMarkdown"],
                 page: 1,
                 per_page: 50
             }
         ]
     })
+        .then(r => r.results[0])
 
 }

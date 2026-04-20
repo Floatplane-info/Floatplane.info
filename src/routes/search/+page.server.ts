@@ -1,17 +1,21 @@
 import {error, redirect} from "@sveltejs/kit";
-import Typesense from "typesense";
+import {Client} from "typesense";
 import type {PageServerLoad} from "./$types";
 import {env} from "$env/dynamic/private";
 import type {FloatplanePost} from "./types.ts";
 
-const client = new Typesense.Client({
-    nodes: [{ host: "search.ajg0702.us", port: 443, protocol: "https" }],
-    apiKey: env.SEARCH_KEY
-});
+let client: Client;
 
 export const load: PageServerLoad = async ({platform, url}) => {
     const q = url.searchParams.get('q');
     if(!q) throw redirect(302, '/');
+
+    if(!client) {
+        client = new Client({
+            nodes: [{ host: "search.ajg0702.us", port: 443, protocol: "https" }],
+            apiKey: env.SEARCH_KEY
+        });
+    }
 
     const ai = platform?.env.AI;
     if(!ai) throw error(503, "AI not available");

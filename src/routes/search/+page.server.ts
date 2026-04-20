@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
     const ai = platform?.env.AI;
     if(!ai) throw error(503, "AI not available");
 
-    const embeddedQuery = await ai.run("@cf/qwen/qwen3-embedding-0.6b", {
+    const embeddedQuery = q === "*" ? undefined : await ai.run("@cf/qwen/qwen3-embedding-0.6b", {
         queries: q
     }, { gateway: { id: "floatplane-info" } })
         .then(r => {

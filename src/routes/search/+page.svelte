@@ -4,8 +4,23 @@
     import SearchIcon from "@lucide/svelte/icons/search";
     import * as InputGroup from "$lib/components/ui/input-group";
     import {page} from "$app/state";
+    import {onMount} from "svelte";
+    import {invalidateAll} from "$app/navigation";
 
     let query = $state(page.url.searchParams.get("q") ?? undefined);
+
+    onMount(() => {
+        let i;
+
+        if(query === "*" && page.url.searchParams.get("sort") === "oldest") {
+            // when listing all and sorting by oldest, invalidate every minute
+            i = setInterval(() => {
+                invalidateAll();
+            }, 60e3)
+        }
+
+        return () => clearInterval(i);
+    })
 
 
     let {data}: PageProps = $props();
@@ -25,7 +40,7 @@
     <br>
 
     <div class="text-center">
-        {#each data.hits as result}
+        {#each data.hits as result (result.document.id)}
             <VideoResult {result} />
         {/each}
     </div>

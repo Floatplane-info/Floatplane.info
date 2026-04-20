@@ -13,7 +13,7 @@
 </script>
 
 <a class="inline-block w-96 p-1 m-1 text-left align-top" href="https://www.floatplane.com/post/{result.document.id}">
-    <img class="w-full aspect-video" src={result.document.thumbnail.path} alt="" aria-hidden="true">
+    <img class="w-full aspect-video" src={result.document.thumbnail?.path} alt="" aria-hidden="true">
     <div class="px-1">
         <Tooltip.Root>
             <Tooltip.Trigger>

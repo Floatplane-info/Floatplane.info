@@ -34,13 +34,14 @@ export const load: PageServerLoad = async ({platform, url}) => {
             {
                 collection: "floatplane",
                 q,
-                query_by: ["title", "textMarkdown"],
-                vector_query: `embedding:(${JSON.stringify(embeddedQuery)})`,
-                sort_by: "_text_match(bucket_size: 5):desc,releaseDate:desc,_text_match:desc",
+                query_by: ["title"],
+                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.4, distance_threshold:0.10)`,
+                sort_by: "_text_match(bucket_size: 20):desc,releaseDate:desc,_text_match:desc",
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],
                 page: 1,
-                per_page: 50
+                per_page: 50,
+                rerank_hybrid_matches: true
             }
         ]
     })

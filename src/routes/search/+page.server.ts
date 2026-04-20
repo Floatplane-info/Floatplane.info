@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],
                 page: 1,
-                per_page: 50,
+                per_page: 100,
                 rerank_hybrid_matches: true,
                 prefix: false,
                 drop_tokens_threshold: 10

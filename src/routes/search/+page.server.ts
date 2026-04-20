@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
 
     const embeddedQuery = await ai.run("@cf/qwen/qwen3-embedding-0.6b", {
         queries: q
-    })
+    }, { gateway: { id: "floatplane-info" } })
         .then(r => {
             const embedding = r.data?.[0];
             if(!embedding) throw new Error("No embedding returned: " + JSON.stringify(r));

@@ -12,7 +12,7 @@
     } = $props();
 </script>
 
-<a class="inline-block w-96 p-1 m-1 text-left align-top" href="https://www.floatplane.com/post/{result.document.id}">
+<a class="inline-block w-96 p-1 m-1 mb-4 text-left align-top" href="https://www.floatplane.com/post/{result.document.id}">
     <img class="w-full aspect-video" src={result.document.thumbnail?.path} alt="" aria-hidden="true">
     <div class="px-1">
         <Tooltip.Root>
@@ -27,10 +27,15 @@
                 </p>
             </Tooltip.Content>
         </Tooltip.Root>
-        <div class="text-xs opacity-80 line-clamp-1 result-highlight">
+        <div class="text-xs opacity-80 line-clamp-1 result-highlight -mt-1.5">
             {@html sanitizeHtml(result.highlight.text?.snippet ?? result.highlight.textMarkdown?.snippet ?? result.document.text, {allowedTags: ["mark"]})}
         </div>
-        <div class="text-xs opacity-80 mt-2">
+        <div class="text-xs opacity-80 mt-0.5">
+            <img
+                    src={result.document.channel.icon.path}
+                    aria-hidden="true" alt=""
+                    class="h-7 w-7 inline-block rounded-full self-center"
+            >
             {result.document.channel.title}
             <span class="ml-4 opacity-80">
                 <DateStamp epochSeconds={new Date(result.document.releaseDate).getTime() / 1000}/>

@@ -3,6 +3,7 @@ import {Client} from "typesense";
 import type {PageServerLoad} from "./$types";
 import {env} from "$env/dynamic/private";
 import type {FloatplanePost} from "./types.ts";
+import {dev} from "$app/environment";
 
 let client: Client;
 
@@ -32,21 +33,34 @@ export const load: PageServerLoad = async ({platform, url}) => {
     const embedTime = Date.now() - embedStart;
 
     const sortBy = url.searchParams.get("sort");
-    let sort_by = "_text_match(bucket_size: 5):desc,releaseDate:desc,_text_match:desc";
+    let sort_by = "_text_match(bucket_size: 5):desc,timestamp:desc,_text_match:desc";
     if(sortBy && sortBy !== "default") {
         if(sortBy === "oldest") {
-            sort_by = "releaseDate:asc"
+            sort_by = "timestamp:asc"
         } else if(sortBy === "newest") {
-            sort_by = "releaseDate:desc"
+            sort_by = "timestamp:desc"
         } else if(sortBy === "relevant") {
             sort_by = "_text_match:desc"
         }
     }
 
+    let filterBy: string[] = [];
+
+    const creator = url.searchParams.get("creator");
+    if(creator) {
+        filterBy.push(`creator.id:[${creator}]`)
+    }
+
+    const channel = url.searchParams.get("channel");
+    if(channel) {
+        filterBy.push(`channel.id:[${channel}]`)
+    }
+
+
     const results = await client.multiSearch.perform<FloatplanePost[]>({
         searches: [
             {
-                collection: "floatplane",
+                collection: dev ? "floatplane_mo92l4n5" : "floatplane",
                 q,
                 query_by: ["title", "textMarkdown"],
                 query_by_weights: [4, 1],
@@ -54,6 +68,9 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 sort_by,
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],
+                facet_by: ["creator.id", "channel.id"],
+                facet_return_parent: "creator.id,channel.id",
+                filter_by: filterBy.length > 0 ? filterBy.join(" && ") : undefined,
                 page: 1,
                 per_page: 100,
                 rerank_hybrid_matches: true,

@@ -60,7 +60,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
     const results = await client.multiSearch.perform<FloatplanePost[]>({
         searches: [
             {
-                collection: dev ? "floatplane_mo92l4n5" : "floatplane",
+                collection: dev ? "floatplane_mo95hjzu" : "floatplane",
                 q,
                 query_by: ["title", "textMarkdown"],
                 query_by_weights: [4, 1],
@@ -70,6 +70,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 highlight_fields: ["text", "title", "textMarkdown"],
                 facet_by: ["creator.id", "channel.id"],
                 facet_return_parent: "creator.id,channel.id",
+                max_facet_values: 1000,
                 filter_by: filterBy.length > 0 ? filterBy.join(" && ") : undefined,
                 page: 1,
                 per_page: 100,

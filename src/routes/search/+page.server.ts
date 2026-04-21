@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
     const ai = platform?.env.AI;
     if(!ai) throw error(503, "AI not available");
 
+    const embedStart = Date.now();
     const embeddedQuery = q === "*" ? undefined : await ai.run("@cf/qwen/qwen3-embedding-0.6b", {
         queries: q
     }, { gateway: { id: "floatplane-info" } })
@@ -28,6 +29,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
             if(!embedding) throw new Error("No embedding returned: " + JSON.stringify(r));
             return embedding;
         });
+    const embedTime = Date.now() - embedStart;
 
     const sortBy = url.searchParams.get("sort");
     let sort_by = "_text_match(bucket_size: 5):desc,releaseDate:desc,_text_match:desc";
@@ -41,7 +43,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
         }
     }
 
-    return await client.multiSearch.perform<FloatplanePost[]>({
+    const results = await client.multiSearch.perform<FloatplanePost[]>({
         searches: [
             {
                 collection: "floatplane",
@@ -60,6 +62,11 @@ export const load: PageServerLoad = async ({platform, url}) => {
             }
         ]
     })
-        .then(r => r.results[0])
+        .then(r => r.results[0]);
+
+    return {
+        results,
+        embedTime
+    }
 
 }

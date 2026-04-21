@@ -6,9 +6,9 @@
     import DateStamp from "$lib/DateStamp.svelte";
 
     let {
-        result
+        result,
     }: {
-        result: SearchResponseHit<FloatplanePost>
+        result: SearchResponseHit<FloatplanePost>,
     } = $props();
 </script>
 
@@ -17,17 +17,17 @@
     <div class="px-1">
         <Tooltip.Root>
             <Tooltip.Trigger>
-                <div class="line-clamp-2 text-left cursor-pointer" title={result.document.title}>
+                <div class="line-clamp-2 text-left cursor-pointer result-highlight" title={result.document.title}>
                     {@html sanitizeHtml(result.highlight.title?.snippet ?? result.document.title, {allowedTags: ["mark"]})}
                 </div>
             </Tooltip.Trigger>
             <Tooltip.Content>
-                <p>
+                <p class="result-highlight">
                     {@html sanitizeHtml(result.highlight.title?.snippet ?? result.document.title, {allowedTags: ["mark"]})}
                 </p>
             </Tooltip.Content>
         </Tooltip.Root>
-        <div class="text-xs opacity-80 line-clamp-1">
+        <div class="text-xs opacity-80 line-clamp-1 result-highlight">
             {@html sanitizeHtml(result.highlight.text?.snippet ?? result.highlight.textMarkdown?.snippet ?? result.document.text, {allowedTags: ["mark"]})}
         </div>
         <div class="text-xs opacity-80 mt-2">
@@ -38,3 +38,17 @@
         </div>
     </div>
 </a>
+
+<style>
+    @reference "#layout.css";
+    .result-highlight :global(mark) {
+        /*background-color: rgb(var(--color-primary-500) / 0.4);*/
+        background-color: inherit;
+        font-weight: bold;
+        @apply brightness-200;
+        color: var(--color-cyan-900);
+    }
+    :global(.dark) .result-highlight :global(mark) {
+        color: var(--color-cyan-400);
+    }
+</style>

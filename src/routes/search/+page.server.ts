@@ -48,13 +48,31 @@ export const load: PageServerLoad = async ({platform, url}) => {
 
     const creator = url.searchParams.get("creator");
     if(creator) {
-        filterBy.push(`creator.id:[${creator}]`)
+        const creators = creator.split(",");
+        const pos = creators
+            .filter(c => !c.startsWith("!"));
+        const neg = creators
+            .filter(c => c.startsWith("!"))
+            .map(c => c.substring(1));
+
+        if(pos.length > 0) filterBy.push(`creator.id:[${pos.join(",")}]`);
+        if(neg.length > 0) filterBy.push(`creator.id:![${neg.join(",")}]`);
     }
 
     const channel = url.searchParams.get("channel");
     if(channel) {
-        filterBy.push(`channel.id:[${channel}]`)
+        const channels = channel.split(",");
+        const pos = channels
+            .filter(c => !c.startsWith("!"));
+        const neg = channels
+            .filter(c => c.startsWith("!"))
+            .map(c => c.substring(1));
+
+        if(pos.length > 0) filterBy.push(`channel.id:[${pos.join(",")}]`);
+        if(neg.length > 0) filterBy.push(`channel.id:![${neg.join(",")}]`);
     }
+
+    console.log({filterBy})
 
 
     const results = await client.multiSearch.perform<FloatplanePost[]>({

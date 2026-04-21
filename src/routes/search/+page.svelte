@@ -4,7 +4,7 @@
     import SearchIcon from "@lucide/svelte/icons/search";
     import * as InputGroup from "$lib/components/ui/input-group";
     import {page} from "$app/state";
-    import {Badge} from "$lib/components/ui/badge/index.ts";
+    import {Badge} from "$lib/components/ui/badge/index";
 
     let query = $state(page.url.searchParams.get("q") ?? undefined);
 

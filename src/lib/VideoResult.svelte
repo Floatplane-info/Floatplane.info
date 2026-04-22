@@ -11,7 +11,7 @@
         result: SearchResponseHit<FloatplanePost>,
     } = $props();
 
-    let postLink = $derived(`https://www.floatplane.com/post${result.document.id}`);
+    let postLink = $derived(`https://www.floatplane.com/post/${result.document.id}`);
     let channelLink = $derived(`https://www.floatplane.com/channel/${result.document.creator.urlname}/home/${result.document.channel.urlname}`);
 </script>
 

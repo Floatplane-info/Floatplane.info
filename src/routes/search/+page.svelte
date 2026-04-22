@@ -101,15 +101,17 @@
                                             }
                                             return url.toString();
                                         })()}
-                                            class="hover:underline"
+                                            class="hover:underline flex"
                                     >
                                         <img
                                                 src={channel.parent?.icon.path}
                                                 aria-hidden="true" alt=""
-                                                class="h-4 w-4 inline-block rounded-full"
+                                                class="h-4 w-4 inline-block rounded-full self-center"
                                         >
-                                        {channel.parent?.title}
-                                        <Badge variant="outline">
+                                        <span class="pl-2 pr-1">
+                                            {channel.parent?.title}
+                                        </span>
+                                        <Badge variant="outline" class="self-center hover:no-underline">
                                             {channel.count}
                                         </Badge>
                                     </a>

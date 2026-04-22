@@ -3,13 +3,17 @@
     import VideoResult from "$lib/VideoResult.svelte";
     import SearchIcon from "@lucide/svelte/icons/search";
     import * as InputGroup from "$lib/components/ui/input-group";
+    import * as NativeSelect from "$lib/components/ui/native-select";
     import {page} from "$app/state";
     import {Badge} from "$lib/components/ui/badge/index";
+    import {commas} from "$lib/utils.ts";
 
-    let query = $state(page.url.searchParams.get("q") ?? undefined);
-
+    let form: HTMLFormElement | undefined = $state();
 
     let {data}: PageProps = $props();
+
+    let query = $derived(data.q);
+    let sort = $derived(page.url.searchParams.get("sort") ?? "");
 </script>
 <!--<pre>{JSON.stringify(data, undefined, '\t')}</pre>-->
 <svelte:head>
@@ -18,13 +22,34 @@
 
 <div class="p-2 pt-4 mx-auto">
     <h1 class="inline-block">Floatplane Search</h1>
-    <form action="/search" method="get" class="inline-block ml-4">
-        <InputGroup.Root>
-            <InputGroup.Input type="search" name="q" placeholder="Search across floatplane..." value={query && query === "*" ? "" : query} />
-            <InputGroup.Addon>
-                <SearchIcon />
-            </InputGroup.Addon>
-        </InputGroup.Root>
+    <form action="/search" method="get" class="inline-block ml-4" bind:this={form}>
+        <div class="inline-block">
+            <InputGroup.Root>
+                <InputGroup.Input
+                        type="search"
+                        name="q"
+                        placeholder="Search across floatplane..."
+                        value={query && query === "*" ? "" : query}
+                />
+                <InputGroup.Addon>
+                    <SearchIcon />
+                </InputGroup.Addon>
+            </InputGroup.Root>
+        </div>
+        <NativeSelect.Root name="sort" class="inline-block ml-2 align-top" onchange={() => form?.requestSubmit()} value={sort}>
+            <NativeSelect.Option value="">
+                {#if query !== "*"}
+                    Default – Relevance & Upload Date (newest)
+                {:else}
+                    Upload Date (newest)
+                {/if}
+            </NativeSelect.Option>
+            {#if query !== "*"}
+                <NativeSelect.Option value="relevant">Relevance Only</NativeSelect.Option>
+                <NativeSelect.Option value="newest">Upload Date (newest)</NativeSelect.Option>
+            {/if}
+            <NativeSelect.Option value="oldest">Upload Date (oldest)</NativeSelect.Option>
+        </NativeSelect.Root>
     </form>
     <br>
     <br>
@@ -95,7 +120,7 @@
 
     <div class="grid justify-center grid-cols-[repeat(auto-fit,384px)] md:ml-60">
         <div class="block text-right text-xs opacity-60 w-full col-span-full">
-            {data.results.found} results found in {Math.round((data.results.search_time_ms + data.embedTime) / 10) / 100}s.
+            {commas(data.results.found)} results found in {Math.round((data.results.search_time_ms + data.embedTime) / 10) / 100}s.
         </div>
         {#each data.results.hits as result (result.document.id)}
             <VideoResult {result} />

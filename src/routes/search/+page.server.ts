@@ -8,7 +8,8 @@ import {dev} from "$app/environment";
 let client: Client;
 
 export const load: PageServerLoad = async ({platform, url}) => {
-    const q = url.searchParams.get('q');
+    let q = url.searchParams.get('q');
+    if(q === "") q = "*";
     if(!q) throw redirect(302, '/');
 
     if(!client) {
@@ -102,7 +103,8 @@ export const load: PageServerLoad = async ({platform, url}) => {
 
     return {
         results,
-        embedTime
+        embedTime,
+        q
     }
 
 }

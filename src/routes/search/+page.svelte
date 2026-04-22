@@ -12,6 +12,9 @@
     let {data}: PageProps = $props();
 </script>
 <!--<pre>{JSON.stringify(data, undefined, '\t')}</pre>-->
+<svelte:head>
+    <title>{query !== "*" ? `Search results for "${query}"` : "All Indexed Posts"} - Floatplane.Info</title>
+</svelte:head>
 
 <div class="p-2 pt-4 mx-auto">
     <h1 class="inline-block">Floatplane Search</h1>

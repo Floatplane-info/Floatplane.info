@@ -2,6 +2,9 @@
     import * as InputGroup from "$lib/components/ui/input-group/index.js";
     import SearchIcon from "@lucide/svelte/icons/search";
 </script>
+<svelte:head>
+    <title>Better Floatplane Search - Floatplane.Info</title>
+</svelte:head>
 
 <div class="limit mx-auto flex items-center justify-center h-screen">
     <div class="w-full text-center">

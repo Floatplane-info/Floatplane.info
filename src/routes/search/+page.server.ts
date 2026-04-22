@@ -79,7 +79,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
     const results = await client.multiSearch.perform<FloatplanePost[]>({
         searches: [
             {
-                collection: dev ? "floatplane_mo95hjzu" : "floatplane",
+                collection: "floatplane",
                 q,
                 query_by: ["title", "textMarkdown"],
                 query_by_weights: [4, 1],

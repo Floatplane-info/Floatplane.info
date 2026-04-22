@@ -27,9 +27,18 @@
                 </p>
             </Tooltip.Content>
         </Tooltip.Root>
-        <div class="text-xs opacity-80 line-clamp-1 result-highlight -mt-1.5">
-            {@html sanitizeHtml(result.highlight.text?.snippet ?? result.highlight.textMarkdown?.snippet ?? result.document.text, {allowedTags: ["mark"]})}
-        </div>
+        <Tooltip.Root>
+            <Tooltip.Trigger>
+                <div class="text-xs opacity-80 line-clamp-1 result-highlight -mt-1.5 text-left">
+                    {@html sanitizeHtml(result.highlight.text?.snippet ?? result.highlight.textMarkdown?.snippet ?? result.document.text, {allowedTags: ["mark"]})}
+                </div>
+            </Tooltip.Trigger>
+            <Tooltip.Content>
+                <p class="result-highlight">
+                    {@html sanitizeHtml(result.highlight.text?.snippet ?? result.highlight.textMarkdown?.snippet ?? result.document.text, {allowedTags: ["mark"]})}
+                </p>
+            </Tooltip.Content>
+        </Tooltip.Root>
         <div class="text-xs opacity-80 mt-0.5">
             <img
                     src={result.document.channel.icon.path}

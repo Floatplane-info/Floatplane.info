@@ -27,6 +27,7 @@
                 </p>
             </Tooltip.Content>
         </Tooltip.Root>
+        <br>
         <Tooltip.Root>
             <Tooltip.Trigger>
                 <div class="text-xs opacity-80 line-clamp-1 result-highlight -mt-1.5 text-left">

@@ -6,7 +6,7 @@
     import * as NativeSelect from "$lib/components/ui/native-select";
     import {page} from "$app/state";
     import {Badge} from "$lib/components/ui/badge/index";
-    import {commas} from "$lib/utils.ts";
+    import {commas} from "$lib/utils";
 
     let form: HTMLFormElement | undefined = $state();
 

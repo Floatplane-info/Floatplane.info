@@ -4,6 +4,7 @@
     import sanitizeHtml from "sanitize-html";
     import * as Tooltip from "$lib/components/ui/tooltip";
     import DateStamp from "$lib/DateStamp.svelte";
+    import {addZero} from "$lib/utils";
 
     let {
         result,
@@ -17,7 +18,24 @@
 
 <div class="inline-block w-96 p-1 m-1 mb-4 text-left align-top">
     <a href={postLink}>
-        <img class="w-full aspect-video" src={result.document.thumbnail?.path} alt="" aria-hidden="true" loading="lazy">
+        <div class="w-full aspect-video relative">
+            <img class="w-full aspect-video rounded-md" src={result.document.thumbnail?.path} alt="" aria-hidden="true" loading="lazy">
+            {#if typeof result.document.metadata.displayDuration === "number"}
+                {@const displayDuration = result.document.metadata.displayDuration}
+                {@const hours = Math.floor(displayDuration / (60 * 60))}
+                {@const minutes = Math.floor((displayDuration % (60 * 60)) / 60)}
+                {@const seconds = Math.floor(displayDuration % 60)}
+                <div class="absolute bottom-1 right-1 bg-black/50 rounded-sm px-1 text-xs">
+                    <div class="flex">
+                        {#if hours > 0}
+                            <span>{hours}:</span>
+                        {/if}
+                        <span>{addZero(minutes)}:</span>
+                        <span>{addZero(seconds)}</span>
+                    </div>
+                </div>
+            {/if}
+        </div>
         <div class="px-1">
             <Tooltip.Root>
                 <Tooltip.Trigger>

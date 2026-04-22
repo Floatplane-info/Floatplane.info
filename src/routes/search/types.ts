@@ -30,6 +30,7 @@ export type FloatplanePost = {
         hasPicture: boolean
         pictureCount: number,
         isFeatured: boolean,
+        displayDuration?: number,
         hasGallery: boolean,
         galleryCount: number
     },

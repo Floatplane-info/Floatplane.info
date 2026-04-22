@@ -12,6 +12,10 @@ export function commas(x: number | undefined | null, decimals?: undefined | numb
 	return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts.length > 1 ? "." : "") + parts.slice(1).join(".");
 }
 
+export function addZero(n: number): string {
+	return n > 9 ? "" + n : "0" + n
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, "child"> : T;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

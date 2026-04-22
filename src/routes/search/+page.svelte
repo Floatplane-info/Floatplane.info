@@ -14,6 +14,8 @@
 
     let query = $derived(data.q);
     let sort = $derived(page.url.searchParams.get("sort") ?? "");
+    let creator = $derived(page.url.searchParams.get("creator"));
+    let channel = $derived(page.url.searchParams.get("channel"));
 </script>
 <!--<pre>{JSON.stringify(data, undefined, '\t')}</pre>-->
 <svelte:head>
@@ -50,6 +52,8 @@
             {/if}
             <NativeSelect.Option value="oldest">Upload Date (oldest)</NativeSelect.Option>
         </NativeSelect.Root>
+        <input type="hidden" name="creator" value={creator}>
+        <input type="hidden" name="channel" value={channel}>
     </form>
     <br>
     <br>

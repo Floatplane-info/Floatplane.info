@@ -83,7 +83,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 q,
                 query_by: ["title", "textMarkdown"],
                 query_by_weights: [4, 1],
-                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.75, distance_threshold:0.10)`,
+                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, distance_threshold:0.10)`,
                 sort_by,
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],

@@ -10,8 +10,9 @@
     let mainImageLoaded = $state(false);
 
     const smallestThumbnail = $derived(props.thumbnail.childImages?.reduce((prev, curr) => {
+        if(!prev) return curr;
         return curr.width < prev.width ? curr : prev;
-    }));
+    }, undefined));
 
     const smallestThumbnailDifference = $derived(smallestThumbnail ? props.thumbnail.width - smallestThumbnail.width : smallestThumbnail);
 

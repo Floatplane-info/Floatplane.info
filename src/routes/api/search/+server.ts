@@ -1,13 +1,13 @@
 import {error, redirect} from "@sveltejs/kit";
-import {Client} from "typesense";
-import type {PageServerLoad} from "./$types";
+import {Client, type SearchResponse} from "typesense";
 import {env} from "$env/dynamic/private";
-import type {FloatplanePost} from "./types.ts";
 import {dev} from "$app/environment";
+import type {FloatplanePost} from "../../search/types.ts";
+import { type RequestHandler } from "@sveltejs/kit";
 
 let client: Client;
 
-export const load: PageServerLoad = async ({platform, url}) => {
+export const GET: RequestHandler = async ({platform, url}) => {
     let q = url.searchParams.get('q');
     if(q === "") q = "*";
     if(!q) throw redirect(302, '/');
@@ -78,6 +78,14 @@ export const load: PageServerLoad = async ({platform, url}) => {
         if(neg.length > 0) filterBy.push(`channel.id:![${neg.join(",")}]`);
     }
 
+    let page = 1;
+    const qPage = url.searchParams.get("page");
+    if(qPage && !isNaN(Number(qPage))) {
+        page = Number(qPage);
+    }
+
+    const per_page = 100;
+
 
     const results = await client.multiSearch.perform<(FloatplanePost & {timestamp: number})[]>({
         searches: [
@@ -95,8 +103,8 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 facet_return_parent: "creator.id,channel.id",
                 max_facet_values: 1000,
                 filter_by: filterBy.length > 0 ? filterBy.join(" && ") : undefined,
-                page: 1,
-                per_page: 100,
+                page,
+                per_page,
                 rerank_hybrid_matches: true,
                 prefix: false,
                 drop_tokens_threshold: 10,
@@ -119,10 +127,23 @@ export const load: PageServerLoad = async ({platform, url}) => {
             });
     }
 
-    return {
+    return Response.json({
         results,
         embedTime,
-        q
-    }
+        q,
+        page,
+        per_page,
+    })
+
+}
+
+export type SearchApiResponse = {
+    results: SearchResponse<FloatplanePost & {
+        timestamp: number
+    }>,
+    embedTime: number,
+    q: string,
+    page: number,
+    per_page: number,
 
 }

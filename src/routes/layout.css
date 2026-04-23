@@ -134,6 +134,9 @@
 	h2 {
 		font-size: var(--text-xl);
 	}
+	a.a[href] {
+		@apply text-blue-600 dark:text-cyan-400 hover:underline hover:brightness-125;
+	}
 }
 
 .limit {

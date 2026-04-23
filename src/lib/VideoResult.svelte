@@ -86,7 +86,7 @@
             <DateStamp epochSeconds={new Date(result.document.releaseDate).getTime() / 1000}/>
             {#if dev}
                 &nbsp;
-                {result.vector_distance}
+                {result.hybrid_search_info.rank_fusion_score}
             {/if}
         </span>
     </div>

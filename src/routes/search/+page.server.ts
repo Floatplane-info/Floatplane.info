@@ -105,11 +105,11 @@ export const load: PageServerLoad = async ({platform, url}) => {
         results.hits
             ?.sort((a, b) => {
                 const aDaysAgo = ((Date.now() / 60e3) - a.document.timestamp) / (24 * 60);
-                const aScore = (a.hybrid_search_info.rank_fusion_score * 0.8) +
-                    (a.hybrid_search_info.rank_fusion_score * (1/Math.pow(aDaysAgo, 1/5)) * 0.2);
+                const aScore = (a.hybrid_search_info.rank_fusion_score * 0.7) +
+                    (a.hybrid_search_info.rank_fusion_score * (1/Math.pow(aDaysAgo, 1/3)) * 0.3);
                 const bDaysAgo = ((Date.now() / 60e3) - b.document.timestamp) / (24 * 60);
-                const bScore = (b.hybrid_search_info.rank_fusion_score * 0.8) +
-                    (b.hybrid_search_info.rank_fusion_score * (1/Math.pow(bDaysAgo, 1/5)) * 0.2);
+                const bScore = (b.hybrid_search_info.rank_fusion_score * 0.7) +
+                    (b.hybrid_search_info.rank_fusion_score * (1/Math.pow(bDaysAgo, 1/3)) * 0.3);
                 return bScore - aScore;
             });
     }

@@ -95,7 +95,8 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 per_page: 100,
                 rerank_hybrid_matches: true,
                 prefix: false,
-                drop_tokens_threshold: 10
+                drop_tokens_threshold: 10,
+                highlight_full_fields: "title"
             }
         ]
     })

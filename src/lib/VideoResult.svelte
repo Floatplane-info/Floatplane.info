@@ -86,7 +86,7 @@
             <DateStamp epochSeconds={new Date(result.document.releaseDate).getTime() / 1000}/>
             {#if dev}
                 &nbsp;
-                {result.document.timestamp}
+                {result.vector_distance}
             {/if}
         </span>
     </div>

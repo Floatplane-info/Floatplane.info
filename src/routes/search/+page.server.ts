@@ -37,6 +37,9 @@ export const load: PageServerLoad = async ({platform, url}) => {
     // const similarityField = "_vector_distance";
     const sortBy = url.searchParams.get("sort");
     let sort_by = `${similarityField}(bucket_size: 5):desc,timestamp:desc,_vector_distance:desc`;
+    if(q === "*" && (!sortBy || sortBy === "default")) {
+        sort_by = "timestamp:desc"
+    }
     if(sortBy && sortBy !== "default") {
         if(sortBy === "oldest") {
             sort_by = "timestamp:asc"
@@ -103,7 +106,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
     })
         .then(r => r.results[0]);
 
-    if(!sortBy || sortBy === "default") {
+    if(q !== "*" && (!sortBy || sortBy === "default")) {
         results.hits
             ?.sort((a, b) => {
                 const aDaysAgo = ((Date.now() / 60e3) - a.document.timestamp) / (24 * 60);

@@ -73,7 +73,10 @@
                                 }
                                 return url.toString();
                             })()}
-                            class="hover:underline flex"
+                            class={[
+                                "hover:underline flex rounded-md px-1",
+                                page.url.searchParams.get("creator")?.includes(creator.value) && "bg-red-500/20"
+                            ]}
                     >
                         <img
                                 src={creator.parent?.icon.path}
@@ -101,7 +104,10 @@
                                             }
                                             return url.toString();
                                         })()}
-                                            class="hover:underline flex"
+                                            class={[
+                                                "hover:underline flex rounded-md px-0.5",
+                                                page.url.searchParams.get("channel")?.includes(channel.value) && "bg-red-500/20"
+                                            ]}
                                     >
                                         <img
                                                 src={channel.parent?.icon.path}

@@ -5,6 +5,7 @@
 </script>
 <svelte:head>
     <title>Better Floatplane Search - Floatplane.Info</title>
+    <meta name="description" content="A search tool for Floatplane that works way better than the built-in search.">
 </svelte:head>
 
 <div class="limit mx-auto flex items-center justify-center h-screen">

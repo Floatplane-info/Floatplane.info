@@ -83,7 +83,7 @@ export const load: PageServerLoad = async ({platform, url}) => {
                 q,
                 query_by: ["title", "textMarkdown"],
                 query_by_weights: [4, 1],
-                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.8, distance_threshold:0.10)`,
+                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.75, distance_threshold:0.10)`,
                 sort_by,
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],
@@ -105,9 +105,11 @@ export const load: PageServerLoad = async ({platform, url}) => {
         results.hits
             ?.sort((a, b) => {
                 const aDaysAgo = ((Date.now() / 60e3) - a.document.timestamp) / (24 * 60);
-                const aScore = (a.text_match * 0.8) + (a.text_match * (1/Math.pow(aDaysAgo, 2/3)) * 0.2);
+                const aScore = (a.hybrid_search_info.rank_fusion_score * 0.8) +
+                    (a.hybrid_search_info.rank_fusion_score * (1/Math.pow(aDaysAgo, 1/5)) * 0.2);
                 const bDaysAgo = ((Date.now() / 60e3) - b.document.timestamp) / (24 * 60);
-                const bScore = (b.text_match * 0.8) + (b.text_match * (1/Math.pow(bDaysAgo, 2/3)) * 0.2);
+                const bScore = (b.hybrid_search_info.rank_fusion_score * 0.8) +
+                    (b.hybrid_search_info.rank_fusion_score * (1/Math.pow(bDaysAgo, 1/5)) * 0.2);
                 return bScore - aScore;
             });
     }

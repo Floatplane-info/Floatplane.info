@@ -52,7 +52,7 @@ type FloatplaneChannel = {
     icon: FloatplaneImage
 }
 
-type FloatplaneImage = {
+export type FloatplaneImage = {
     width: number,
     height: number,
     path: string,

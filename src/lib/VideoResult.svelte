@@ -6,6 +6,7 @@
     import DateStamp from "$lib/DateStamp.svelte";
     import {addZero} from "$lib/utils";
     import {dev} from "$app/environment";
+    import FloatplaneThumbnail from "$lib/FloatplaneThumbnail.svelte";
 
     let {
         result,
@@ -23,17 +24,17 @@
     <a href={postLink}>
         <div class="w-full aspect-video relative">
             {#if dev}
-                <div class="absolute top-1 left-1">
+                <div class="absolute top-1 left-1 z-50">
                     #{i+1}
                 </div>
             {/if}
-            <img class="w-full aspect-video rounded-md" src={result.document.thumbnail?.path} alt="" aria-hidden="true" loading="lazy">
+            <FloatplaneThumbnail thumbnail={result.document.thumbnail} {i}/>
             {#if typeof result.document.metadata.displayDuration === "number"}
                 {@const displayDuration = result.document.metadata.displayDuration}
                 {@const hours = Math.floor(displayDuration / (60 * 60))}
                 {@const minutes = Math.floor((displayDuration % (60 * 60)) / 60)}
                 {@const seconds = Math.floor(displayDuration % 60)}
-                <div class="absolute bottom-1 right-1 bg-black/50 rounded-sm px-1 text-xs">
+                <div class="absolute bottom-1 right-1 z-20 bg-black/50 rounded-sm px-1 text-xs">
                     <div class="flex">
                         {#if hours > 0}
                             <span>{hours}:</span>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import * as InputGroup from "$lib/components/ui/input-group/index.js";
     import SearchIcon from "@lucide/svelte/icons/search";
+    import {Button} from "$lib/components/ui/button";
 </script>
 <svelte:head>
     <title>Better Floatplane Search - Floatplane.Info</title>
@@ -21,6 +22,10 @@
                 </InputGroup.Addon>
             </InputGroup.Root>
         </form>
+        <br>
+        <Button href="/search?q=" variant="secondary">View All Posts</Button>
+        <Button href="/search?q=&sort=oldest" variant="secondary">View Oldest Posts</Button>
+        <br>
         <br>
         <div>
             I made this site because of how consistently bad Floatplane's built-in search has been.<br>

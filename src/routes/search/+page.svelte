@@ -23,7 +23,9 @@
 </svelte:head>
 
 <div class="p-2 pt-4 mx-auto">
-    <h1 class="inline-block">Floatplane Search</h1>
+    <a href="/">
+        <h1 class="inline-block pl-1">Floatplane Search</h1>
+    </a>
     <form action="/search" method="get" class="inline-block ml-4" bind:this={form}>
         <div class="inline-block">
             <InputGroup.Root>

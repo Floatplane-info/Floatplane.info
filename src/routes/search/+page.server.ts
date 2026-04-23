@@ -33,15 +33,17 @@ export const load: PageServerLoad = async ({platform, url}) => {
         });
     const embedTime = Date.now() - embedStart;
 
+    const similarityField = "_text_match";
+    // const similarityField = "_vector_distance";
     const sortBy = url.searchParams.get("sort");
-    let sort_by = "_text_match(bucket_size: 5):desc,timestamp:desc,_text_match:desc";
+    let sort_by = `${similarityField}(bucket_size: 5):desc,timestamp:desc,_vector_distance:desc`;
     if(sortBy && sortBy !== "default") {
         if(sortBy === "oldest") {
             sort_by = "timestamp:asc"
         } else if(sortBy === "newest") {
             sort_by = "timestamp:desc"
         } else if(sortBy === "relevant") {
-            sort_by = "_text_match:desc"
+            sort_by =  similarityField + ":desc"
         }
     }
 
@@ -73,17 +75,15 @@ export const load: PageServerLoad = async ({platform, url}) => {
         if(neg.length > 0) filterBy.push(`channel.id:![${neg.join(",")}]`);
     }
 
-    console.log({filterBy})
 
-
-    const results = await client.multiSearch.perform<FloatplanePost[]>({
+    const results = await client.multiSearch.perform<(FloatplanePost & {timestamp: number})[]>({
         searches: [
             {
                 collection: "floatplane",
                 q,
                 query_by: ["title", "textMarkdown"],
                 query_by_weights: [4, 1],
-                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.4, distance_threshold:0.10)`,
+                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.8, distance_threshold:0.10)`,
                 sort_by,
                 exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
                 highlight_fields: ["text", "title", "textMarkdown"],
@@ -100,6 +100,17 @@ export const load: PageServerLoad = async ({platform, url}) => {
         ]
     })
         .then(r => r.results[0]);
+
+    if(!sortBy || sortBy === "default") {
+        results.hits
+            ?.sort((a, b) => {
+                const aDaysAgo = ((Date.now() / 60e3) - a.document.timestamp) / (24 * 60);
+                const aScore = (a.text_match * 0.8) + (a.text_match * (1/Math.pow(aDaysAgo, 2/3)) * 0.2);
+                const bDaysAgo = ((Date.now() / 60e3) - b.document.timestamp) / (24 * 60);
+                const bScore = (b.text_match * 0.8) + (b.text_match * (1/Math.pow(bDaysAgo, 2/3)) * 0.2);
+                return bScore - aScore;
+            });
+    }
 
     return {
         results,

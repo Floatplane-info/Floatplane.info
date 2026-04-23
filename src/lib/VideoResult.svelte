@@ -5,11 +5,14 @@
     import * as Tooltip from "$lib/components/ui/tooltip";
     import DateStamp from "$lib/DateStamp.svelte";
     import {addZero} from "$lib/utils";
+    import {dev} from "$app/environment";
 
     let {
         result,
+        i
     }: {
         result: SearchResponseHit<FloatplanePost>,
+        i: number
     } = $props();
 
     let postLink = $derived(`https://www.floatplane.com/post/${result.document.id}`);
@@ -19,6 +22,11 @@
 <div class="inline-block w-96 p-1 m-1 mb-4 text-left align-top">
     <a href={postLink}>
         <div class="w-full aspect-video relative">
+            {#if dev}
+                <div class="absolute top-1 left-1">
+                    #{i+1}
+                </div>
+            {/if}
             <img class="w-full aspect-video rounded-md" src={result.document.thumbnail?.path} alt="" aria-hidden="true" loading="lazy">
             {#if typeof result.document.metadata.displayDuration === "number"}
                 {@const displayDuration = result.document.metadata.displayDuration}
@@ -76,6 +84,10 @@
         </a>
         <span class="ml-4 opacity-80">
             <DateStamp epochSeconds={new Date(result.document.releaseDate).getTime() / 1000}/>
+            {#if dev}
+                &nbsp;
+                {result.document.timestamp}
+            {/if}
         </span>
     </div>
 </div>

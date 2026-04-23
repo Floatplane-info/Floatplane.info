@@ -128,8 +128,8 @@
         <div class="block text-right text-xs opacity-60 w-full col-span-full">
             {commas(data.results.found)} results found in {Math.round((data.results.search_time_ms + data.embedTime) / 10) / 100}s.
         </div>
-        {#each data.results.hits as result (result.document.id)}
-            <VideoResult {result} />
+        {#each data.results.hits as result, i (result.document.id)}
+            <VideoResult {result} {i}/>
         {/each}
     </div>
 </div>

@@ -20,7 +20,7 @@
     let channelLink = $derived(`https://www.floatplane.com/channel/${result.document.creator.urlname}/home/${result.document.channel.urlname}`);
 </script>
 
-<div class="inline-block w-96 p-1 m-1 mb-4 text-left align-top">
+<div class="inline-block w-96 p-1 m-1 mb-4 text-left align-top overflow-hidden">
     <a href={postLink}>
         <div class="w-full aspect-video relative">
             {#if dev}

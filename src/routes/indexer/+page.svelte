@@ -1,10 +1,22 @@
 <script lang="ts">
-
+    import * as Breadcrumb from "$lib/components/ui/breadcrumb";
 </script>
 <svelte:head>
     <title>Indexer - Floatplane.Info</title>
     <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
+
+<Breadcrumb.Root class="p-2 pl-3">
+    <Breadcrumb.List>
+        <Breadcrumb.Item>
+            <Breadcrumb.Link href="/">Floatplane.Info</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item>
+            <Breadcrumb.Page>Indexer</Breadcrumb.Page>
+        </Breadcrumb.Item>
+    </Breadcrumb.List>
+</Breadcrumb.Root>
 
 <div class="limit mx-auto pt-8">
     <h1>Indexer User-Agent</h1>

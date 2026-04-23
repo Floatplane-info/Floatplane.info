@@ -22,6 +22,9 @@
             </InputGroup.Root>
         </form>
         <br>
-        This site is still <b>very</b> WIP, but i hope to polish it up over the next few days/weeks.
+        <div>
+            I made this site because of how consistently bad Floatplane's built-in search has been.<br>
+            If you want to learn more, please head to the <a class="a" href="/about">about page</a>.
+        </div>
     </div>
 </div>

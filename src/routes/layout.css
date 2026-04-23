@@ -130,9 +130,11 @@
 	}
 	h1 {
 		font-size: var(--text-2xl);
+		@apply pb-3;
 	}
 	h2 {
 		font-size: var(--text-xl);
+		@apply pb-2;
 	}
 	a.a[href] {
 		@apply text-blue-600 dark:text-cyan-400 hover:underline hover:brightness-125;

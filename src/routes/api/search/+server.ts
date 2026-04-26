@@ -4,6 +4,7 @@ import {env} from "$env/dynamic/private";
 import {dev} from "$app/environment";
 import type {FloatplanePost} from "../../search/types.ts";
 import { type RequestHandler } from "@sveltejs/kit";
+import {retry} from "$lib/utils";
 
 let client: Client;
 
@@ -23,14 +24,16 @@ export const GET: RequestHandler = async ({platform, url}) => {
     if(!ai) throw error(503, "AI not available");
 
     const embedStart = Date.now();
-    const embeddedQuery = q === "*" ? undefined : await ai.run("@cf/qwen/qwen3-embedding-0.6b", {
-        queries: q
-    }, { gateway: { id: "floatplane-info" } })
-        .then(r => {
-            const embedding = r.data?.[0];
-            if(!embedding) throw new Error("No embedding returned: " + JSON.stringify(r));
-            return embedding;
-        });
+    const embeddedQuery = q === "*" ? undefined : await retry(() =>
+        ai.run("@cf/qwen/qwen3-embedding-0.6b", {
+            queries: q
+        }, { gateway: { id: "floatplane-info" } })
+            .then(r => {
+                const embedding = r.data?.[0];
+                if(!embedding) throw new Error("No embedding returned: " + JSON.stringify(r));
+                return embedding;
+            })
+    );
     const embedTime = Date.now() - embedStart;
 
     const similarityField = "_text_match";
@@ -87,31 +90,33 @@ export const GET: RequestHandler = async ({platform, url}) => {
     const per_page = 100;
 
 
-    const results = await client.multiSearch.perform<(FloatplanePost & {timestamp: number})[]>({
-        searches: [
-            {
-                collection: "floatplane",
-                q,
-                query_by: ["title", "textMarkdown"],
-                query_by_weights: [4, 1],
-                vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, distance_threshold:0.10)`,
-                sort_by,
-                prioritize_token_position: true,
-                exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
-                highlight_fields: ["text", "title", "textMarkdown"],
-                facet_by: ["creator.id", "channel.id"],
-                facet_return_parent: "creator.id,channel.id",
-                max_facet_values: 1000,
-                filter_by: filterBy.length > 0 ? filterBy.join(" && ") : undefined,
-                page,
-                per_page,
-                rerank_hybrid_matches: true,
-                prefix: false,
-                drop_tokens_threshold: 10,
-                highlight_full_fields: "title"
-            }
-        ]
-    })
+    const results = await retry(() =>
+        client.multiSearch.perform<(FloatplanePost & {timestamp: number})[]>({
+            searches: [
+                {
+                    collection: "floatplane",
+                    q,
+                    query_by: ["title", "textMarkdown"],
+                    query_by_weights: [4, 1],
+                    vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, distance_threshold:0.10)`,
+                    sort_by,
+                    prioritize_token_position: true,
+                    exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
+                    highlight_fields: ["text", "title", "textMarkdown"],
+                    facet_by: ["creator.id", "channel.id"],
+                    facet_return_parent: "creator.id,channel.id",
+                    max_facet_values: 1000,
+                    filter_by: filterBy.length > 0 ? filterBy.join(" && ") : undefined,
+                    page,
+                    per_page,
+                    rerank_hybrid_matches: true,
+                    prefix: false,
+                    drop_tokens_threshold: 10,
+                    highlight_full_fields: "title"
+                }
+            ]
+        })
+    )
         .then(r => r.results[0]);
 
     if(q !== "*" && (!sortBy || sortBy === "default")) {

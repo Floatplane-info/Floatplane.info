@@ -34,7 +34,7 @@ export type FloatplanePost = {
         hasGallery: boolean,
         galleryCount: number
     },
-    thumbnail: FloatplaneImage,
+    thumbnail?: FloatplaneImage,
     isAccessible: boolean,
     galleryAttachments: string[]
     videoAttachments: string[]

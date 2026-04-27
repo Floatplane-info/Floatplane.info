@@ -2,6 +2,7 @@
     import * as InputGroup from "$lib/components/ui/input-group/index.js";
     import SearchIcon from "@lucide/svelte/icons/search";
     import {Button} from "$lib/components/ui/button";
+    import logo from "$lib/images/floatplane-info.webp";
 </script>
 <svelte:head>
     <title>Better Floatplane Search - Floatplane.Info</title>
@@ -10,6 +11,7 @@
 
 <div class="limit mx-auto flex items-center justify-center h-screen">
     <div class="w-full text-center">
+        <img src={logo} class="h-48 mb-6 mx-auto" aria-hidden="true" alt="">
         <h1 class="text-6xl mb-6">Floatplane Search</h1>
 
         <form action="/search" method="get" class="">

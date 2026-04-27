@@ -4,7 +4,7 @@
 
 
     import { ModeWatcher } from "mode-watcher";
-	import favicon from '$lib/assets/favicon.svg';
+	import favicon from '$lib/images/floatplane-info-196.webp';
     import * as ToolTip from "$lib/components/ui/tooltip";
     import {afterNavigate, beforeNavigate} from "$app/navigation";
     import {navigating} from "$app/state";

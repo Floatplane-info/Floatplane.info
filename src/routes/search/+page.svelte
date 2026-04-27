@@ -11,6 +11,7 @@
     import LazyLoad from "@dimfeld/svelte-lazyload";
     import type {SearchApiResponse} from "../api/search/+server.ts";
     import {onMount} from "svelte";
+    import logo from "$lib/images/floatplane-info.webp";
 
     let form: HTMLFormElement | undefined = $state();
 
@@ -49,7 +50,8 @@
 </svelte:head>
 
 <div class="p-2 pt-4 mx-auto">
-    <a href="/">
+    <a href="/" class="ml-1">
+        <img src={logo} class="h-8 inline-block mb-1.5" aria-hidden="true" alt="">
         <h1 class="inline-block pl-1">Floatplane Search</h1>
     </a>
     <form action="/search" method="get" class="inline-block ml-4" bind:this={form}>

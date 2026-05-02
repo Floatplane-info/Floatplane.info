@@ -27,7 +27,7 @@ export const GET: RequestHandler = async ({platform, url}) => {
     const embeddedQuery = q === "*" ? undefined : await retry(() =>
         ai.run("@cf/qwen/qwen3-embedding-0.6b", {
             queries: q
-        }, { gateway: { id: "floatplane-info" } })
+        }, { gateway: { id: "floatplane-info", metadata: {task: "search"} } })
             .then(r => {
                 const embedding = r.data?.[0];
                 if(!embedding) throw new Error("No embedding returned: " + JSON.stringify(r));

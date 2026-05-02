@@ -12,6 +12,7 @@
     import type {SearchApiResponse} from "../api/search/+server.ts";
     import {onMount} from "svelte";
     import logo from "$lib/images/floatplane-info.webp";
+    import {dev} from "$app/environment";
 
     let form: HTMLFormElement | undefined = $state();
 
@@ -87,6 +88,9 @@
     </form>
     <br>
     <br>
+    {#if dev && data.results.parsed_nl_query}
+        <pre>{JSON.stringify(data.results.parsed_nl_query, undefined, '\t')}</pre>
+    {/if}
     <div class="mb-4 max-md:text-center max-md:mx-auto md:h-0 md:sticky md:top-2 md:w-60">
         <ul class="inline-block text-left max-md:max-h-96 md:max-h-screen overflow-y-auto md:pb-32">
             {#each data.results.facet_counts?.[0].counts.sort((a, b) => b.count - a.count) as creator (creator.value)}

@@ -16,7 +16,8 @@ export const GET: RequestHandler = async ({platform, url}) => {
     if(!client) {
         client = new Client({
             nodes: [{ host: "search.ajg0702.us", port: 443, protocol: "https" }],
-            apiKey: env.SEARCH_KEY
+            apiKey: env.SEARCH_KEY,
+            timeoutSeconds: 60
         });
     }
 
@@ -112,7 +113,10 @@ export const GET: RequestHandler = async ({platform, url}) => {
                     rerank_hybrid_matches: true,
                     prefix: false,
                     drop_tokens_threshold: 10,
-                    highlight_full_fields: "title"
+                    highlight_full_fields: "title",
+
+                    // nl_query: true,
+                    // nl_model_id: "ollama"
                 }
             ]
         })

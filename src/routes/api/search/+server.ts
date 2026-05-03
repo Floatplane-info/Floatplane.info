@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({platform, url}) => {
         client = new Client({
             nodes: [{ host: "search.ajg0702.us", port: 443, protocol: "https" }],
             apiKey: env.SEARCH_KEY,
-            timeoutSeconds: 60
+            connectionTimeoutSeconds: 60
         });
     }
 
@@ -99,7 +99,7 @@ export const GET: RequestHandler = async ({platform, url}) => {
                     q,
                     query_by: ["title", "textMarkdown"],
                     query_by_weights: [4, 1],
-                    vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, distance_threshold:0.10)`,
+                    vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, distance_threshold:0.8)`, // for whatever reason, this distance threshold is inverse of what distance thresholds normally are
                     sort_by,
                     prioritize_token_position: true,
                     exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],
@@ -112,7 +112,8 @@ export const GET: RequestHandler = async ({platform, url}) => {
                     per_page,
                     rerank_hybrid_matches: true,
                     prefix: false,
-                    drop_tokens_threshold: 10,
+                    // drop_tokens_threshold: 10,
+                    // typo_tokens_threshold: 5,
                     highlight_full_fields: "title",
 
                     // nl_query: true,

@@ -88,7 +88,7 @@
     </form>
     <br>
     <br>
-    {#if dev && data.results.parsed_nl_query}
+    {#if dev && data.results?.parsed_nl_query}
         <pre>{JSON.stringify(data.results.parsed_nl_query, undefined, '\t')}</pre>
     {/if}
     <div class="mb-4 max-md:text-center max-md:mx-auto md:h-0 md:sticky md:top-2 md:w-60">

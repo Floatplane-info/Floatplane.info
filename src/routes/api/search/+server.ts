@@ -99,7 +99,7 @@ export const GET: RequestHandler = async ({platform, url}) => {
                     q,
                     query_by: ["title", "textMarkdown"],
                     query_by_weights: [4, 1],
-                    vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, distance_threshold:0.8)`, // for whatever reason, this distance threshold is inverse of what distance thresholds normally are
+                    vector_query: q === "*" ? undefined : `embedding:(${JSON.stringify(embeddedQuery)}, alpha: 0.6, k: 10000, distance_threshold:0.65)`, // for whatever reason, this distance threshold is inverse of what distance thresholds normally are
                     sort_by,
                     prioritize_token_position: true,
                     exclude_fields: ["embedding", "creator.liveStream", "creator.subscriptionPlans"],

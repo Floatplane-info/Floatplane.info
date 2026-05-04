@@ -116,6 +116,7 @@ export const GET: RequestHandler = async ({platform, url}) => {
                     // drop_tokens_threshold: 10,
                     // typo_tokens_threshold: 5,
                     highlight_full_fields: "title",
+                    prioritize_num_matching_fields: false,
 
                     use_cache: !dev
 
@@ -128,13 +129,18 @@ export const GET: RequestHandler = async ({platform, url}) => {
         .then(r => r.results[0]);
 
     if(q !== "*" && (!sortBy || sortBy === "default")) {
+        // for some reason typesense doesn't deprioritize matches found with dropped tokens, so we need to do it here
+        const highestTokensMatched = results.hits
+            ?.reduce((acc, hit) => Math.max(acc, hit.text_match_info?.tokens_matched ?? 0), 0);
         results.hits
             ?.sort((a, b) => {
                 const aDaysAgo = ((Date.now() / 60e3) - a.document.timestamp) / (24 * 60);
-                const aScore = (a.hybrid_search_info.rank_fusion_score * 0.7) +
+                const aScore = (a.hybrid_search_info.rank_fusion_score * 0.2) +
+                    (a.hybrid_search_info.rank_fusion_score * ((a.text_match_info?.tokens_matched ?? 0) / (highestTokensMatched ?? 1)) * 0.5) +
                     (a.hybrid_search_info.rank_fusion_score * (1/Math.pow(aDaysAgo, 1/3)) * 0.3);
                 const bDaysAgo = ((Date.now() / 60e3) - b.document.timestamp) / (24 * 60);
-                const bScore = (b.hybrid_search_info.rank_fusion_score * 0.7) +
+                const bScore = (b.hybrid_search_info.rank_fusion_score * 0.2) +
+                    (b.hybrid_search_info.rank_fusion_score * ((b.text_match_info?.tokens_matched ?? 0) / (highestTokensMatched ?? 1)) * 0.5) +
                     (b.hybrid_search_info.rank_fusion_score * (1/Math.pow(bDaysAgo, 1/3)) * 0.3);
                 return bScore - aScore;
             });

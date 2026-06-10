@@ -34,7 +34,7 @@
                 {@const hours = Math.floor(displayDuration / (60 * 60))}
                 {@const minutes = Math.floor((displayDuration % (60 * 60)) / 60)}
                 {@const seconds = Math.floor(displayDuration % 60)}
-                <div class="absolute bottom-1 right-1 z-20 bg-black/50 rounded-sm px-1 text-xs">
+                <div class="absolute bottom-1 right-1 z-20 bg-black/50 rounded-sm px-1 text-xs text-white">
                     <div class="flex">
                         {#if hours > 0}
                             <span>{hours}:</span>

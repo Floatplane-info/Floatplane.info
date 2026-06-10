@@ -25,7 +25,7 @@
         and you should be able to find it in the first few results (unless there are many very similar results).
     </p>
     <p>
-        However, if you want to go beyond, you can learn more about how search works so you can find things even easier, you can.
+        However, if you want to go beyond, you can learn more about how search works so you can maybe find things even easier.
     </p>
     <hr>
     <h2>Filter to the creator or channel</h2>

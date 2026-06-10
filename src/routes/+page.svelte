@@ -29,8 +29,9 @@
         <Button href="/search?q=" variant="secondary">View All Posts</Button>
         <Button href="/search?q=&sort=oldest" variant="secondary">View Oldest Posts</Button>
         <br>
+        <Button href="/search-tips" variant="outline" class="mt-2">Search Tips</Button>
         <br>
-        <div>
+        <div class="mt-4">
             I made this site because of how consistently bad Floatplane's built-in search has been.<br>
             If you want to learn more, please head to the <a class="a" href="/about">about page</a>.
         </div>

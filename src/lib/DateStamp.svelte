@@ -1,11 +1,12 @@
 <script lang="ts">
-
     import { onMount } from 'svelte';
     import { shortMonths, isSameDay, yesterday } from '$lib/timeUtils';
-
     import { typed } from '$lib';
+	import {page} from "$app/state";
 
     let { epochSeconds = typed<number>() } = $props();
+
+	const timeZone = page.params?.__timezone as string | undefined;
 
     let nowish = $state(Date.now());
     let secondsAgo: number | undefined = $derived((nowish / 1000) - epochSeconds);
@@ -32,7 +33,7 @@
 </script>
 
 <span
-        title="{shortMonths[date.getMonth()]} {date.getDate()}, {date.getFullYear()} at {date.toLocaleTimeString(undefined, { timeStyle: 'medium', })}"
+        title="{shortMonths[date.getMonth()]} {date.getDate()}, {date.getFullYear()} at {date.toLocaleTimeString(undefined, { timeStyle: 'medium', timeZone })}"
 >
 	{#if secondsAgo < 30}
 		a few seconds ago
@@ -41,10 +42,12 @@
 	{:else if isSameDay(new Date(), date)}
 		Today at {date.toLocaleTimeString(undefined, {
         timeStyle: 'short',
+		timeZone
     })}
 	{:else if isSameDay(yesterday(), date)}
 		Yesterday at {date.toLocaleTimeString(undefined, {
         timeStyle: 'short',
+		timeZone
     })}
 	{:else}
 		{shortMonths[date.getMonth()]} {date.getDate()}, {date.getFullYear()}

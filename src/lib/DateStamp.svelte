@@ -3,10 +3,11 @@
     import { shortMonths, isSameDay, yesterday } from '$lib/timeUtils';
     import { typed } from '$lib';
 	import {page} from "$app/state";
+	import {browser} from "$app/environment";
 
     let { epochSeconds = typed<number>() } = $props();
 
-	const timeZone = page.params?.__timezone as string | undefined;
+	const timeZone = !browser ? page.params?.__timezone as string | undefined : undefined;
 
     let nowish = $state(Date.now());
     let secondsAgo: number | undefined = $derived((nowish / 1000) - epochSeconds);

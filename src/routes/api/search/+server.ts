@@ -70,6 +70,16 @@ export const GET: RequestHandler = async ({platform, url}) => {
         if(neg.length > 0) filterBy.push(`creator.id:![${neg.join(",")}]`);
     }
 
+    const before = url.searchParams.get("before")
+    if(before && !isNaN(Number(before))) {
+        filterBy.push("timestamp:<" + before);
+    }
+
+    const after = url.searchParams.get("after")
+    if(after && !isNaN(Number(after))) {
+        filterBy.push("timestamp:>" + after);
+    }
+
     const channel = url.searchParams.get("channel");
     if(channel) {
         const channels = channel.split(",");

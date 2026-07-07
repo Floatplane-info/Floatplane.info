@@ -1,6 +1,9 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "floatplane-info",
+	"limits": {
+		"cpu_ms": 200
+	},
 	"observability": {
 		"enabled": true,
 		"logs": {
